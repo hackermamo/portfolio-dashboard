@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Portfolio | Developer</title>
+    <meta name="description" content="Professional portfolio showcasing web development projects">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/custom.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'code': ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                        accent: '#06b6d4',
+                        dark: {
+                            100: '#1e1e2e',
+                            200: '#181825',
+                            300: '#11111b',
+                            400: '#0f0f1a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter bg-dark-400 text-white overflow-x-hidden">
+    <!-- Preloader -->
+    <div id="preloader" class="fixed inset-0 z-[100] bg-dark-400 flex items-center justify-center">
+        <div class="text-center">
+            <div class="relative w-24 h-24 mx-auto mb-6">
+                <div class="absolute inset-0 border-4 border-primary/30 rounded-full"></div>
+                <div class="absolute inset-0 border-4 border-transparent border-t-primary rounded-full animate-spin"></div>
+                <div class="absolute inset-3 border-4 border-transparent border-t-secondary rounded-full animate-spin" style="animation-direction: reverse; animation-duration: 0.8s;"></div>
+            </div>
+            <p class="text-gray-400 text-lg font-light tracking-wider">Loading Portfolio...</p>
+        </div>
+    </div>
+    
+    <!-- 3D Canvas Background -->
+    <canvas id="three-canvas" class="fixed top-0 left-0 w-full h-full -z-10"></canvas>
+    
+    <!-- Custom Cursor -->
+    <div id="cursor" class="fixed w-4 h-4 bg-primary rounded-full pointer-events-none z-[999] mix-blend-difference transition-transform duration-100"></div>
+    <div id="cursor-follower" class="fixed w-10 h-10 border border-primary/50 rounded-full pointer-events-none z-[998] transition-all duration-300"></div>
+    
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <a href="#home" class="flex items-center gap-2 group">
+                    <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center transform group-hover:rotate-12 transition-transform">
+                        <span class="text-white font-bold text-xl">&lt;/&gt;</span>
+                    </div>
+                    <span id="nav-name" class="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Portfolio</span>
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex items-center gap-8">
+                    <a href="#home" class="nav-link active">Home</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#skills" class="nav-link">Skills</a>
+                    <a href="#projects" class="nav-link">Projects</a>
+                    <a href="#experience" class="nav-link">Experience</a>
+                    <a href="#education" class="nav-link">Education</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                    <a href="#" id="resume-nav-btn" target="_blank" class="px-6 py-2.5 bg-gradient-to-r from-primary to-secondary rounded-full font-medium hover:shadow-lg hover:shadow-primary/25 transform hover:scale-105 transition-all">
+                        <i class="fas fa-file-alt mr-2"></i>Resume
+                    </a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="lg:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 group">
+                    <span class="w-6 h-0.5 bg-white transition-all group-hover:bg-primary"></span>
+                    <span class="w-6 h-0.5 bg-white transition-all group-hover:bg-primary"></span>
+                    <span class="w-4 h-0.5 bg-white transition-all group-hover:w-6 group-hover:bg-primary"></span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="lg:hidden fixed inset-0 bg-dark-400/98 backdrop-blur-xl transform translate-x-full transition-transform duration-500 z-50">
+            <div class="flex flex-col h-full p-8">
+                <div class="flex justify-between items-center mb-12">
+                    <span class="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Menu</span>
+                    <button id="close-menu-btn" class="w-10 h-10 flex items-center justify-center rounded-full bg-dark-100 hover:bg-primary transition-colors">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div class="flex flex-col gap-6 text-2xl">
+                    <a href="#home" class="mobile-nav-link">Home</a>
+                    <a href="#about" class="mobile-nav-link">About</a>
+                    <a href="#skills" class="mobile-nav-link">Skills</a>
+                    <a href="#projects" class="mobile-nav-link">Projects</a>
+                    <a href="#experience" class="mobile-nav-link">Experience</a>
+                    <a href="#education" class="mobile-nav-link">Education</a>
+                    <a href="#contact" class="mobile-nav-link">Contact</a>
+                </div>
+                <div class="mt-auto">
+                    <a href="#" id="resume-mobile-btn" target="_blank" class="block w-full py-4 bg-gradient-to-r from-primary to-secondary rounded-xl font-semibold text-center text-lg">
+                        <i class="fas fa-download mr-2"></i>Download Resume
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden">
+        <!-- Gradient Orbs -->
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <!-- Left Content -->
+                <div class="text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/30 rounded-full mb-6 animate-fade-in">
+                        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                        <span class="text-sm text-gray-300">Available for opportunities</span>
+                    </div>
+                    
+                    <h1 class="text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 leading-tight">
+                        <span class="text-gray-400">Hello, I'm</span><br>
+                        <span id="hero-name" class="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">John Developer</span>
+                    </h1>
+                    
+                    <div class="h-12 mb-6">
+                        <p class="text-xl sm:text-2xl text-gray-300">
+                            I'm a <span id="typewriter" class="text-primary font-semibold"></span><span class="animate-blink">|</span>
+                        </p>
+                    </div>
+                    
+                    <p id="hero-subtitle" class="text-gray-400 text-lg max-w-xl mx-auto lg:mx-0 mb-8 leading-relaxed">
+                        Creating digital experiences with code and creativity
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-4 justify-center lg:justify-start mb-10">
+                        <a href="#projects" class="group px-8 py-4 bg-gradient-to-r from-primary to-secondary rounded-xl font-semibold hover:shadow-xl hover:shadow-primary/25 transform hover:scale-105 transition-all flex items-center gap-2">
+                            View My Work
+                            <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                        <a href="#contact" class="px-8 py-4 border-2 border-primary/50 rounded-xl font-semibold hover:bg-primary/10 hover:border-primary transition-all flex items-center gap-2">
+                            <i class="fas fa-envelope"></i>
+                            Get in Touch
+                        </a>
+                    </div>
+                    
+                    <!-- Social Links -->
+                    <div id="hero-social" class="flex gap-4 justify-center lg:justify-start">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+                
+                <!-- Right Content - 3D Avatar/Graphic -->
+                <div class="relative hidden lg:block">
+                    <div id="hero-3d-container" class="w-full aspect-square relative">
+                        <!-- 3D content rendered here -->
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="relative">
+                                <!-- Profile Image Container -->
+                                <div class="w-80 h-80 rounded-full overflow-hidden border-4 border-primary/30 shadow-2xl shadow-primary/20">
+                                    <img id="hero-profile-img" src="https://via.placeholder.com/400" alt="Profile" class="w-full h-full object-cover">
+                                </div>
+                                <!-- Floating Elements -->
+                                <div class="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center shadow-lg animate-float">
+                                    <i class="fab fa-react text-3xl"></i>
+                                </div>
+                                <div class="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-br from-secondary to-accent rounded-xl flex items-center justify-center shadow-lg animate-float" style="animation-delay: 0.5s;">
+                                    <i class="fab fa-python text-2xl"></i>
+                                </div>
+                                <div class="absolute top-1/2 -right-8 w-14 h-14 bg-gradient-to-br from-accent to-primary rounded-lg flex items-center justify-center shadow-lg animate-float" style="animation-delay: 1s;">
+                                    <i class="fab fa-js text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2">
+            <a href="#about" class="flex flex-col items-center gap-2 text-gray-400 hover:text-primary transition-colors">
+                <span class="text-sm">Scroll Down</span>
+                <div class="w-6 h-10 border-2 border-current rounded-full flex justify-center pt-2">
+                    <div class="w-1 h-3 bg-current rounded-full animate-scroll"></div>
+                </div>
+            </a>
+        </div>
+    </section>
+    
+    <!-- About Section -->
+    <section id="about" class="py-20 lg:py-32 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-4">About Me</span>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold">
+                    Know <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Who I Am</span>
+                </h2>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                <!-- Image Side -->
+                <div class="relative group">
+                    <div class="absolute -inset-4 bg-gradient-to-r from-primary via-secondary to-accent rounded-3xl blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+                    <div class="relative">
+                        <img id="about-image" src="https://via.placeholder.com/600x700" alt="About Me" class="w-full rounded-3xl shadow-2xl">
+                        <!-- Experience Badge -->
+                        <div class="absolute -bottom-6 -right-6 bg-dark-100 p-6 rounded-2xl shadow-xl border border-primary/20">
+                            <div class="text-center">
+                                <span id="years-exp" class="text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">5+</span>
+                                <p class="text-gray-400 text-sm mt-1">Years of<br>Experience</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Content Side -->
+                <div class="space-y-6">
+                    <h3 id="about-title" class="text-2xl lg:text-3xl font-bold">
+                        Full Stack Developer & 3D Web Enthusiast
+                    </h3>
+                    
+                    <p id="about-bio" class="text-gray-400 leading-relaxed text-lg">
+                        Loading bio...
+                    </p>
+                    
+                    <!-- Info Grid -->
+                    <div class="grid sm:grid-cols-2 gap-4 py-6">
+                        <div class="flex items-center gap-4 p-4 bg-dark-100 rounded-xl border border-gray-800 hover:border-primary/50 transition-colors">
+                            <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-envelope text-primary text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 text-sm">Email</p>
+                                <p id="about-email" class="text-white font-medium truncate">email@example.com</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 p-4 bg-dark-100 rounded-xl border border-gray-800 hover:border-primary/50 transition-colors">
+                            <div class="w-12 h-12 bg-secondary/20 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-map-marker-alt text-secondary text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 text-sm">Location</p>
+                                <p id="about-location" class="text-white font-medium">City, Country</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 p-4 bg-dark-100 rounded-xl border border-gray-800 hover:border-primary/50 transition-colors">
+                            <div class="w-12 h-12 bg-accent/20 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-phone text-accent text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 text-sm">Phone</p>
+                                <p id="about-phone" class="text-white font-medium">+1 234 567 890</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 p-4 bg-dark-100 rounded-xl border border-gray-800 hover:border-primary/50 transition-colors">
+                            <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-briefcase text-green-500 text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 text-sm">Status</p>
+                                <p class="text-white font-medium">Available</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-wrap gap-4 pt-4">
+                        <a href="#" id="about-resume-btn" target="_blank" class="px-8 py-4 bg-gradient-to-r from-primary to-secondary rounded-xl font-semibold hover:shadow-xl hover:shadow-primary/25 transform hover:scale-105 transition-all flex items-center gap-2">
+                            <i class="fas fa-download"></i>
+                            Download Resume
+                        </a>
+                        <a href="#contact" class="px-8 py-4 border-2 border-gray-700 rounded-xl font-semibold hover:bg-dark-100 hover:border-primary/50 transition-all flex items-center gap-2">
+                            <i class="fas fa-paper-plane"></i>
+                            Contact Me
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 lg:py-32 relative bg-dark-300/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-4">My Expertise</span>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold">
+                    Skills & <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Technologies</span>
+                </h2>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Technologies and tools I've mastered throughout my journey</p>
+            </div>
+            
+            <!-- Skills Filter -->
+            <div class="flex flex-wrap justify-center gap-3 mb-12">
+                <button class="skill-filter active px-6 py-2.5 rounded-full bg-primary text-white font-medium transition-all" data-category="all">All Skills</button>
+                <button class="skill-filter px-6 py-2.5 rounded-full bg-dark-100 text-gray-400 font-medium hover:bg-dark-200 transition-all" data-category="programming">Programming</button>
+                <button class="skill-filter px-6 py-2.5 rounded-full bg-dark-100 text-gray-400 font-medium hover:bg-dark-200 transition-all" data-category="framework">Frameworks</button>
+                <button class="skill-filter px-6 py-2.5 rounded-full bg-dark-100 text-gray-400 font-medium hover:bg-dark-200 transition-all" data-category="database">Database</button>
+                <button class="skill-filter px-6 py-2.5 rounded-full bg-dark-100 text-gray-400 font-medium hover:bg-dark-200 transition-all" data-category="tool">Tools</button>
+            </div>
+            
+            <!-- Skills Grid -->
+            <div id="skills-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Populated dynamically -->
+            </div>
+            
+            <!-- 3D Skills Visualization -->
+            <div class="mt-20">
+                <div id="skills-3d" class="h-80 rounded-3xl bg-dark-100 border border-gray-800 overflow-hidden relative">
+                    <canvas id="skills-canvas" class="w-full h-full"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 lg:py-32 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-4">My Portfolio</span>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold">
+                    Featured <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Projects</span>
+                </h2>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">A showcase of my best work and creative solutions</p>
+            </div>
+            
+            <!-- Project Filters -->
+            <div class="flex flex-wrap justify-center gap-3 mb-12">
+                <button class="project-filter active px-6 py-2.5 rounded-full bg-primary text-white font-medium transition-all" data-category="all">All Projects</button>
+                <button class="project-filter px-6 py-2.5 rounded-full bg-dark-100 text-gray-400 font-medium hover:bg-dark-200 transition-all" data-category="featured">Featured</button>
+                <button class="project-filter px-6 py-2.5 rounded-full bg-dark-100 text-gray-400 font-medium hover:bg-dark-200 transition-all" data-category="web">Web Apps</button>
+                <button class="project-filter px-6 py-2.5 rounded-full bg-dark-100 text-gray-400 font-medium hover:bg-dark-200 transition-all" data-category="mobile">Mobile</button>
+                <button class="project-filter px-6 py-2.5 rounded-full bg-dark-100 text-gray-400 font-medium hover:bg-dark-200 transition-all" data-category="ai">AI/ML</button>
+            </div>
+            
+            <!-- Projects Grid -->
+            <div id="projects-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+    </section>
+    
+    <!-- Experience Section -->
+    <section id="experience" class="py-20 lg:py-32 relative bg-dark-300/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-4">Career Path</span>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold">
+                    Work <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Experience</span>
+                </h2>
+            </div>
+            
+            <!-- Experience Timeline -->
+            <div id="experience-timeline" class="relative max-w-4xl mx-auto">
+                <!-- Timeline Line -->
+                <div class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 w-1 h-full bg-gradient-to-b from-primary via-secondary to-accent rounded-full"></div>
+                
+                <!-- Experience Items populated dynamically -->
+            </div>
+        </div>
+    </section>
+    
+    <!-- Education Section -->
+    <section id="education" class="py-20 lg:py-32 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-4">Learning Journey</span>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold">
+                    Education & <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Certifications</span>
+                </h2>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12">
+                <!-- Education -->
+                <div>
+                    <h3 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                        <div class="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-graduation-cap text-primary"></i>
+                        </div>
+                        Education
+                    </h3>
+                    <div id="education-list" class="space-y-6">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+                
+                <!-- Certifications -->
+                <div>
+                    <h3 class="text-2xl font-bold mb-8 flex items-center gap-3">
+                        <div class="w-10 h-10 bg-secondary/20 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-certificate text-secondary"></i>
+                        </div>
+                        Certifications
+                    </h3>
+                    <div id="certifications-list" class="space-y-6">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 lg:py-32 relative bg-dark-300/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <span class="inline-block px-4 py-2 bg-primary/10 rounded-full text-primary text-sm font-medium mb-4">Get in Touch</span>
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold">
+                    Let's Work <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Together</span>
+                </h2>
+                <p class="text-gray-400 mt-4 max-w-2xl mx-auto">Have a project in mind? Let's discuss how we can bring your ideas to life</p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+                <!-- Contact Info -->
+                <div class="space-y-8">
+                    <div class="p-8 bg-dark-100 rounded-3xl border border-gray-800">
+                        <h3 class="text-2xl font-bold mb-6">Contact Information</h3>
+                        
+                        <div class="space-y-6">
+                            <a href="#" class="flex items-center gap-4 group">
+                                <div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                                    <i class="fas fa-envelope text-primary text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-sm">Email me at</p>
+                                    <p id="contact-email" class="text-white font-medium group-hover:text-primary transition-colors">email@example.com</p>
+                                </div>
+                            </a>
+                            
+                            <a href="#" class="flex items-center gap-4 group">
+                                <div class="w-14 h-14 bg-secondary/10 rounded-xl flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
+                                    <i class="fas fa-phone text-secondary text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-sm">Call me at</p>
+                                    <p id="contact-phone" class="text-white font-medium group-hover:text-secondary transition-colors">+1 234 567 890</p>
+                                </div>
+                            </a>
+                            
+                            <a href="#" class="flex items-center gap-4 group">
+                                <div class="w-14 h-14 bg-accent/10 rounded-xl flex items-center justify-center group-hover:bg-accent/20 transition-colors">
+                                    <i class="fas fa-map-marker-alt text-accent text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-gray-500 text-sm">Located in</p>
+                                    <p id="contact-location" class="text-white font-medium group-hover:text-accent transition-colors">City, Country</p>
+                                </div>
+                            </a>
+                        </div>
+                        
+                        <!-- Social Links -->
+                        <div class="mt-8 pt-8 border-t border-gray-800">
+                            <p class="text-gray-500 mb-4">Connect with me</p>
+                            <div id="contact-social" class="flex gap-3">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contact Form -->
+                <div class="p-8 bg-dark-100 rounded-3xl border border-gray-800">
+                    <h3 class="text-2xl font-bold mb-6">Send a Message</h3>
+                    
+                    <form id="contact-form" class="space-y-6">
+                        <div class="grid sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-gray-400 text-sm mb-2">First Name</label>
+                                <input type="text" name="firstName" required class="w-full px-4 py-3 bg-dark-200 border border-gray-700 rounded-xl text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" placeholder="John">
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 text-sm mb-2">Last Name</label>
+                                <input type="text" name="lastName" required class="w-full px-4 py-3 bg-dark-200 border border-gray-700 rounded-xl text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" placeholder="Doe">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-400 text-sm mb-2">Email Address</label>
+                            <input type="email" name="email" required class="w-full px-4 py-3 bg-dark-200 border border-gray-700 rounded-xl text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" placeholder="john@example.com">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-400 text-sm mb-2">Subject</label>
+                            <input type="text" name="subject" required class="w-full px-4 py-3 bg-dark-200 border border-gray-700 rounded-xl text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" placeholder="Project Inquiry">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-400 text-sm mb-2">Message</label>
+                            <textarea name="message" rows="5" required class="w-full px-4 py-3 bg-dark-200 border border-gray-700 rounded-xl text-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none" placeholder="Tell me about your project..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full py-4 bg-gradient-to-r from-primary to-secondary rounded-xl font-semibold hover:shadow-xl hover:shadow-primary/25 transform hover:scale-[1.02] transition-all flex items-center justify-center gap-2">
+                            <i class="fas fa-paper-plane"></i>
+                            Send Message
+                        </button>
+                    </form>
+                    
+                    <!-- Success Message -->
+                    <div id="form-success" class="hidden mt-6 p-4 bg-green-500/10 border border-green-500/30 rounded-xl text-green-400 text-center">
+                        <i class="fas fa-check-circle mr-2"></i>
+                        Message sent successfully! I'll get back to you soon.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="py-8 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-gray-400">
+                    © <span id="footer-year"></span> <span id="footer-name">Portfolio</span>. All rights reserved.
+                </p>
+                <p class="text-gray-400 flex items-center gap-2">
+                    Made with <i class="fas fa-heart text-red-500 animate-pulse"></i> using 
+                    <i class="fab fa-html5 text-orange-500"></i>
+                    <i class="fab fa-js text-yellow-500"></i>
+                    <i class="fab fa-python text-blue-500"></i>
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Back to Top -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-r from-primary to-secondary rounded-full shadow-lg shadow-primary/25 flex items-center justify-center opacity-0 invisible translate-y-4 transition-all duration-300 hover:scale-110 z-40">
+        <i class="fas fa-arrow-up text-xl"></i>
+    </button>
+    
+    <!-- Project Modal -->
+    <div id="project-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="modal-backdrop"></div>
+        <div class="relative min-h-screen flex items-center justify-center p-4">
+            <div class="bg-dark-100 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-gray-800 relative">
+                <button id="close-modal" class="absolute top-4 right-4 w-10 h-10 bg-dark-200 rounded-full flex items-center justify-center hover:bg-primary transition-colors z-10">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div id="modal-content">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50 space-y-2"></div>
+    
+    <!-- Scripts -->
+    <script src="js/three-scene.js"></script>
+    <script src="js/portfolio.js"></script>
+</body>
+</html>

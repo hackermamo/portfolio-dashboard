@@ -1,0 +1,259 @@
+{
+  "meta": {
+    "last_updated": "2026-01-29T13:47:45.927211",
+    "version": "1.0.0"
+  },
+  "personal_info": {
+    "name": "Maman Das",
+    "title": "Full Stack Developer",
+    "subtitle": "Creating Digital Experiences with Code & Creativity",
+    "email": "maman.cse.tcea.2026@gmail.com",
+    "phone": "+91 9233061842",
+    "location": "Sabroom South Tripura",
+    "bio": "I am pursuing my final year of B.Tech and looking for opportunities to enhance my skills and gain hands-on experience in a professional environment.",
+    "profile_image": "assets/images/misc/1769669922_fbd58dad.png",
+    "resume_link": "https://drive.google.com/file/d/1KD23DvHC2QP71704542JlYHZ6aMg1pu1/view?usp=sharing"
+  },
+  "social_links": {
+    "github": "https://github.com/hackermamo",
+    "linkedin": "https://linkedin.com/in/maman-das",
+    "twitter": "",
+    "instagram": "https://instagram.com/mr_official_maman",
+    "youtube": "https://youtube.com/@tripurajobstudyinformation11",
+    "dribbble": ""
+  },
+  "skills": [
+    {
+      "id": "skill_1",
+      "name": "JavaScript",
+      "level": 95,
+      "category": "programming",
+      "icon": "fab fa-js"
+    },
+    {
+      "id": "skill_2",
+      "name": "Python",
+      "level": 90,
+      "category": "programming",
+      "icon": "fab fa-python"
+    },
+    {
+      "id": "skill_5",
+      "name": "Three.js",
+      "level": 85,
+      "category": "framework",
+      "icon": "fas fa-cube"
+    },
+    {
+      "id": "skill_6",
+      "name": "MongoDB",
+      "level": 82,
+      "category": "database",
+      "icon": "fas fa-database"
+    },
+    {
+      "id": "skill_8",
+      "name": "AWS",
+      "level": 75,
+      "category": "tool",
+      "icon": "fab fa-aws"
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj_1",
+      "title": "Price Comparison site",
+      "description": "A modern e-commerce platform to reduce time complexity.",
+      "long_description": "Built a complete e-commerce solution where it scrape the products from the amazon , flipkart , messho, indiamart , at a time .",
+      "image": "assets/images/projects/ecommerce.jpg",
+      "technologies": [
+        "HTML",
+        "CSS",
+        "javascript",
+        "Python",
+        "MongoDB",
+        "Stripe"
+      ],
+      "github_link": "https://github.com/hackermamo/price-comparision.git",
+      "live_link": "",
+      "featured": true,
+      "category": "web",
+      "date": "2024-01"
+    },
+    {
+      "id": "proj_2",
+      "title": "Tweet and Image generation",
+      "description": "Real-time tweet and image powered by AI with natural language processing and smart response suggestions.",
+      "long_description": "Based on NLP prompt it create the title and related to the title it create the image for X",
+      "image": "/assets/images/misc/1769674226_3b767760.png",
+      "technologies": [
+        "Python",
+        "FastAPI",
+        "Tailwind css",
+        "javascript",
+        "WebSocket",
+        "OpenAI"
+      ],
+      "github_link": "https://github.com/hackermamo/AIChatBot.git",
+      "live_link": "",
+      "featured": true,
+      "category": "ai",
+      "date": "2023-11"
+    },
+    {
+      "id": "proj_3",
+      "title": "Portfolio Dashboard",
+      "description": "Interactive investment portfolio tracker with real-time market data and advanced analytics.",
+      "long_description": "Created a comprehensive financial dashboard with real-time stock tracking, portfolio analysis, risk assessment, and predictive modeling using machine learning.",
+      "image": "/assets/images/misc/1769674377_86555ea9.png",
+      "technologies": [
+        "Python",
+        "FastAPI",
+        "CSS",
+        "javascript",
+        "uvicorn"
+      ],
+      "github_link": "https://github.com/johndeveloper/portfolio-dashboard",
+      "live_link": "",
+      "featured": true,
+      "category": "web",
+      "date": "2026-01"
+    }
+  ],
+  "experience": [
+    {
+      "id": "exp_1",
+      "title": "Full Stack Developer",
+      "company": "Yupcha Software pvt. ltd.",
+      "location": "Agartala",
+      "period": "2025",
+      "description": "Leading development of enterprise web applications, mentoring junior developers, and implementing best practices for code quality and performance.",
+      "responsibilities": [
+        "Architected and developed scalable microservices",
+        "Led a team of 5 developers",
+        "Reduced application load time by 40%",
+        "Implemented CI/CD pipelines"
+      ],
+      "technologies": [
+        "python",
+        "HTML",
+        "Tailwind css",
+        "javacript",
+        "openAI"
+      ]
+    },
+    {
+      "id": "exp_2",
+      "title": "Machine Learning",
+      "company": "CTTC Bhubaneswar",
+      "location": "Offline",
+      "period": "7/24-8/24",
+      "description": "Learned all about the python.",
+      "responsibilities": [
+        "Built 10+ web applications from scratch",
+        "Integrated third-party APIs and services",
+        "Optimized database queries",
+        "Conducted code reviews"
+      ],
+      "technologies": [
+        "Python"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "id": "edu_1",
+      "degree": "Bachelor Of Technology ",
+      "institution": "Techno College Of Engineering",
+      "location": "Agartala",
+      "period": "2022-2026",
+      "gpa": "6.5/10",
+      "description": "Specialized in Artificial Intelligence and Machine Learning",
+      "achievements": [
+        "Dean's List all semesters",
+        "Published 2 research papers",
+        "Teaching Assistant for Data Structures"
+      ]
+    },
+    {
+      "id": "edu_2",
+      "degree": "High Secondary",
+      "institution": "Jalefa HS School",
+      "location": "Sabroom South Tripura",
+      "period": "2020-2022",
+      "gpa": "79.2%",
+      "description": "Completed my HS with science stream.",
+      "achievements": [
+        "Graduated with Honors",
+        "President of Coding Club",
+        "Hackathon Winner 2016"
+      ]
+    },
+    {
+      "degree": "Secondary Education",
+      "institution": "Jalefa HS School",
+      "location": "Sabroom South Tripura",
+      "period": "2018-2020",
+      "gpa": "60.4%",
+      "description": "I am done my 10th with all subjects.",
+      "id": "education_1769673541612"
+    }
+  ],
+  "certifications": [
+    {
+      "id": "cert_1",
+      "name": "AWS Solutions Architect Professional",
+      "issuer": "Amazon Web Services",
+      "date": "2023",
+      "link": "https://aws.amazon.com/certification/",
+      "badge_image": "assets/images/misc/aws-badge.png"
+    },
+    {
+      "id": "cert_2",
+      "name": "Google Cloud Professional Developer",
+      "issuer": "Google Cloud",
+      "date": "2023",
+      "link": "https://cloud.google.com/certification/",
+      "badge_image": "assets/images/misc/gcp-badge.png"
+    },
+    {
+      "id": "cert_3",
+      "name": "Meta Frontend Developer",
+      "issuer": "Meta",
+      "date": "2022",
+      "link": "https://www.coursera.org/meta-front-end-developer",
+      "badge_image": "assets/images/misc/meta-badge.png"
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg_1769672752",
+      "firstName": "fgyhu",
+      "lastName": "gcfghjj",
+      "email": "superadmin@medicare.com",
+      "subject": "hghjj",
+      "message": "fghjhb",
+      "timestamp": "2026-01-29T13:15:52.794408",
+      "read": true
+    }
+  ],
+  "stats": {
+    "total_visitors": 0,
+    "total_messages": 1,
+    "projects_count": 4,
+    "years_experience": 5
+  },
+  "theme": {
+    "primary_color": "#6366f1",
+    "secondary_color": "#8b5cf6",
+    "accent_color": "#06b6d4",
+    "background_start": "#0f0f1a",
+    "background_end": "#1a1a2e",
+    "text_primary": "#ffffff",
+    "text_secondary": "#94a3b8"
+  },
+  "admin": {
+    "username": "mamu",
+    "password_hash": "$2b$12$v45Ha4NBabsFj1ufLNz73eYSwaKtUniHhg533PxxJRQCxLTL8FHfK"
+  }
+}
